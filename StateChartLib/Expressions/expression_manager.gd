@@ -5,12 +5,19 @@ class_name ExpressionManager
 
 const PROPERTY_PREFIX := "_"
 
-#@export_group("Settings")
+
+@export_group("Settings")
+# TODO Change to custom Resource
+@export var predefined_expressions:Dictionary
 var expressions: Array[ExpressionNode] = []
 #@export_group("", "")
 
 func _ready() -> void:
 	_all_children_to_properties()
+
+func _add_predefined_expressions() -> void:
+	#TODO
+	pass
 
 func _all_children_to_properties() -> void:
 	expressions.clear()
@@ -21,7 +28,6 @@ func _all_children_to_properties() -> void:
 
 func _get_property_list() -> Array[Dictionary]:
 	var props: Array[Dictionary] = []
-	
 	props.append({
 		"name": "Expressions",
 		"type": TYPE_NIL,

@@ -1,0 +1,320 @@
+[gd_scene load_steps=22 format=3 uid="uid://cu5bceju8wfxy"]
+
+[ext_resource type="Script" path="res://Testing/Test 1/player.gd" id="1_6hrkl"]
+[ext_resource type="Texture2D" uid="uid://c2uev4edphell" path="res://Testing/Test 1/Assets/idle_texture.tres" id="2_kskkb"]
+[ext_resource type="Script" path="res://StateChartLib/Expressions/expression_manager.gd" id="4_1qvcw"]
+[ext_resource type="Script" path="res://StateChartLib/Expressions/new/num_expression_node.gd" id="4_4cq0w"]
+[ext_resource type="Script" path="res://StateChartLib/Expressions/new/bool_expression_node.gd" id="4_h8pcp"]
+[ext_resource type="Script" path="res://StateChartLib/Expressions/new/str_expression_node.gd" id="5_1kd3i"]
+[ext_resource type="Script" path="res://StateChartLib/state_chart.gd" id="5_v4s0i"]
+[ext_resource type="Script" path="res://StateChartLib/StateChartState/parallel_state.gd" id="6_u3ee4"]
+[ext_resource type="Script" path="res://StateChartLib/StateChartState/compound_state.gd" id="7_uu8hk"]
+[ext_resource type="Script" path="res://StateChartLib/StateChartState/atomic_state.gd" id="8_pvpyx"]
+[ext_resource type="Script" path="res://StateChartLib/StateTransition/state_transition.gd" id="9_gf7pf"]
+[ext_resource type="Script" path="res://StateChartLib/StateTransition/Guards/active_state_guard.gd" id="11_8x7wm"]
+[ext_resource type="Script" path="res://StateChartLib/StateTransition/Guards/ExpressionGuards/boolean_expression_guard.gd" id="12_mdnw6"]
+[ext_resource type="Script" path="res://StateChartLib/StateTransition/Guards/none_of_guard.gd" id="13_50vh6"]
+[ext_resource type="Script" path="res://Testing/Test 1/cursor_observer.gd" id="14_mbfmr"]
+[ext_resource type="Texture2D" uid="uid://cqcekfy6q0son" path="res://Testing/Test 1/Assets/walking_texture.tres" id="15_0ldfa"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x46u2"]
+radius = 18.0
+height = 50.0
+
+[sub_resource type="Animation" id="Animation_aoret"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Marker2D/Body:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_kskkb")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Marker2D/Body:vframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_1l00w"]
+resource_name = "idle"
+length = 0.1
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Marker2D/Body:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_kskkb")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Marker2D/Body:vframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_qpubb"]
+resource_name = "walk"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Marker2D/Body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Marker2D/Body:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("15_0ldfa")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Marker2D/Body:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yienl"]
+_data = {
+"RESET": SubResource("Animation_aoret"),
+"idle": SubResource("Animation_1l00w"),
+"walk": SubResource("Animation_qpubb")
+}
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("state_chart", "anim_player", "texture_marker", "stats", "movement_info")]
+position = Vector2(286, 452)
+script = ExtResource("1_6hrkl")
+state_chart = NodePath("StateChart")
+anim_player = NodePath("AnimationPlayer")
+texture_marker = NodePath("Marker2D")
+stats = NodePath("PlayerStats")
+movement_info = NodePath("PlayerMovementInfo")
+
+[node name="Marker2D" type="Marker2D" parent="."]
+
+[node name="Body" type="Sprite2D" parent="Marker2D"]
+position = Vector2(108, -13)
+scale = Vector2(3, 3)
+texture = ExtResource("2_kskkb")
+
+[node name="ParticleEffects" type="Sprite2D" parent="Marker2D"]
+
+[node name="PlayerStats" type="Node" parent="." node_paths=PackedStringArray("expressions")]
+script = ExtResource("4_1qvcw")
+expressions = [NodePath("JumpStrength"), NodePath("Speed"), NodePath("DashStrength")]
+_JumpStrength = 600.0
+_Speed = 400.0
+_DashStrength = 5.0
+
+[node name="JumpStrength" type="Node" parent="PlayerStats"]
+script = ExtResource("4_4cq0w")
+value = 600.0
+
+[node name="Speed" type="Node" parent="PlayerStats"]
+script = ExtResource("4_4cq0w")
+value = 400.0
+
+[node name="DashStrength" type="Node" parent="PlayerStats"]
+script = ExtResource("4_4cq0w")
+value = 5.0
+
+[node name="PlayerMovementInfo" type="Node" parent="." node_paths=PackedStringArray("expressions")]
+script = ExtResource("4_1qvcw")
+expressions = [NodePath("PlayerIsGrounded"), NodePath("DirToMouse"), NodePath("PlayerDirection")]
+_PlayerIsGrounded = false
+_DirToMouse = &""
+_PlayerDirection = 0.0
+
+[node name="PlayerIsGrounded" type="Node" parent="PlayerMovementInfo"]
+script = ExtResource("4_h8pcp")
+
+[node name="DirToMouse" type="Node" parent="PlayerMovementInfo"]
+script = ExtResource("5_1kd3i")
+
+[node name="PlayerDirection" type="Node" parent="PlayerMovementInfo"]
+script = ExtResource("4_4cq0w")
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("5_v4s0i")
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("6_u3ee4")
+
+[node name="LocomotionMode" type="Node" parent="StateChart/Root" node_paths=PackedStringArray("default_substate")]
+script = ExtResource("7_uu8hk")
+default_substate = NodePath("Grounded")
+
+[node name="Airborne" type="Node" parent="StateChart/Root/LocomotionMode"]
+script = ExtResource("8_pvpyx")
+
+[node name="ToGrounded" type="Node" parent="StateChart/Root/LocomotionMode/Airborne" node_paths=PackedStringArray("to")]
+script = ExtResource("9_gf7pf")
+to = NodePath("../../Grounded")
+
+[node name="BooleanExpressionGuard" type="Node" parent="StateChart/Root/LocomotionMode/Airborne/ToGrounded" node_paths=PackedStringArray("expression")]
+script = ExtResource("12_mdnw6")
+expression = NodePath("../../../../../../PlayerMovementInfo/PlayerIsGrounded")
+compare_value = true
+
+[node name="Grounded" type="Node" parent="StateChart/Root/LocomotionMode"]
+script = ExtResource("8_pvpyx")
+
+[node name="ToAirborne" type="Node" parent="StateChart/Root/LocomotionMode/Grounded" node_paths=PackedStringArray("to")]
+script = ExtResource("9_gf7pf")
+to = NodePath("../../Airborne")
+
+[node name="IsPlayerGrounded" type="Node" parent="StateChart/Root/LocomotionMode/Grounded/ToAirborne" node_paths=PackedStringArray("expression")]
+script = ExtResource("12_mdnw6")
+expression = NodePath("../../../../../../PlayerMovementInfo/PlayerIsGrounded")
+
+[node name="MovementMode" type="Node" parent="StateChart/Root" node_paths=PackedStringArray("default_substate")]
+script = ExtResource("7_uu8hk")
+default_substate = NodePath("Normal")
+
+[node name="Normal" type="Node" parent="StateChart/Root/MovementMode"]
+script = ExtResource("8_pvpyx")
+
+[node name="ToDashing" type="Node" parent="StateChart/Root/MovementMode/Normal" node_paths=PackedStringArray("to")]
+script = ExtResource("9_gf7pf")
+to = NodePath("../../Dashing")
+trigger = &"want_dash"
+
+[node name="ActiveStateGuard" type="Node" parent="StateChart/Root/MovementMode/Normal/ToDashing" node_paths=PackedStringArray("state_to_watch")]
+script = ExtResource("11_8x7wm")
+state_to_watch = NodePath("../../../../Cooldowns/Dashing/Ready")
+
+[node name="ToJumping" type="Node" parent="StateChart/Root/MovementMode/Normal" node_paths=PackedStringArray("to")]
+script = ExtResource("9_gf7pf")
+to = NodePath("../../Jumping")
+trigger = &"want_jump"
+
+[node name="IfGrounded" type="Node" parent="StateChart/Root/MovementMode/Normal/ToJumping" node_paths=PackedStringArray("state_to_watch")]
+script = ExtResource("11_8x7wm")
+state_to_watch = NodePath("../../../../LocomotionMode/Grounded")
+
+[node name="Dashing" type="Node" parent="StateChart/Root/MovementMode"]
+script = ExtResource("8_pvpyx")
+
+[node name="ToNormal" type="Node" parent="StateChart/Root/MovementMode/Dashing" node_paths=PackedStringArray("to")]
+script = ExtResource("9_gf7pf")
+to = NodePath("../../Normal")
+delay_seconds = 0.2
+
+[node name="ToJumping" type="Node" parent="StateChart/Root/MovementMode/Dashing" node_paths=PackedStringArray("to")]
+script = ExtResource("9_gf7pf")
+to = NodePath("../../Jumping")
+trigger = &"want_jump"
+
+[node name="Jumping" type="Node" parent="StateChart/Root/MovementMode"]
+script = ExtResource("8_pvpyx")
+
+[node name="ToNormal" type="Node" parent="StateChart/Root/MovementMode/Jumping" node_paths=PackedStringArray("to")]
+script = ExtResource("9_gf7pf")
+to = NodePath("../../Normal")
+
+[node name="ToDashing" type="Node" parent="StateChart/Root/MovementMode/Jumping" node_paths=PackedStringArray("to")]
+script = ExtResource("9_gf7pf")
+to = NodePath("../../Dashing")
+trigger = &"want_dash"
+
+[node name="Cooldowns" type="Node" parent="StateChart/Root"]
+script = ExtResource("6_u3ee4")
+
+[node name="Dashing" type="Node" parent="StateChart/Root/Cooldowns" node_paths=PackedStringArray("default_substate")]
+script = ExtResource("7_uu8hk")
+default_substate = NodePath("Ready")
+
+[node name="Ready" type="Node" parent="StateChart/Root/Cooldowns/Dashing"]
+script = ExtResource("8_pvpyx")
+
+[node name="ToCooldown" type="Node" parent="StateChart/Root/Cooldowns/Dashing/Ready" node_paths=PackedStringArray("to")]
+script = ExtResource("9_gf7pf")
+to = NodePath("../../OnCooldown")
+
+[node name="ActiveStateGuard" type="Node" parent="StateChart/Root/Cooldowns/Dashing/Ready/ToCooldown" node_paths=PackedStringArray("state_to_watch")]
+script = ExtResource("11_8x7wm")
+state_to_watch = NodePath("../../../../../MovementMode/Dashing")
+
+[node name="OnCooldown" type="Node" parent="StateChart/Root/Cooldowns/Dashing"]
+script = ExtResource("8_pvpyx")
+
+[node name="ToReady" type="Node" parent="StateChart/Root/Cooldowns/Dashing/OnCooldown" node_paths=PackedStringArray("to")]
+script = ExtResource("9_gf7pf")
+to = NodePath("../../Ready")
+delay_seconds = 1.0
+
+[node name="NoneOfGuard" type="Node" parent="StateChart/Root/Cooldowns/Dashing/OnCooldown/ToReady"]
+script = ExtResource("13_50vh6")
+
+[node name="ActiveStateGuard" type="Node" parent="StateChart/Root/Cooldowns/Dashing/OnCooldown/ToReady/NoneOfGuard" node_paths=PackedStringArray("state_to_watch")]
+script = ExtResource("11_8x7wm")
+state_to_watch = NodePath("../../../../../../MovementMode/Dashing")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("CapsuleShape2D_x46u2")
+
+[node name="CursorObserver" type="Node2D" parent="." node_paths=PackedStringArray("movement_info")]
+script = ExtResource("14_mbfmr")
+movement_info = NodePath("../PlayerMovementInfo")
+
+[node name="RayCast2D" type="RayCast2D" parent="CursorObserver"]
+position = Vector2(0, -1)
+rotation = -1.5708
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_yienl")
+}
+
+[connection signal="physics_processing" from="StateChart/Root/LocomotionMode/Airborne" to="." method="_on_airborne_physics_processing"]
+[connection signal="activated" from="StateChart/Root/LocomotionMode/Grounded" to="." method="_on_grounded_activated"]
+[connection signal="physics_processing" from="StateChart/Root/MovementMode/Normal" to="." method="_on_normal_physics_processing"]
+[connection signal="activated" from="StateChart/Root/MovementMode/Dashing" to="." method="_on_dashing_activated"]
+[connection signal="physics_processing" from="StateChart/Root/MovementMode/Dashing" to="." method="_on_dashing_physics_processing"]
+[connection signal="activated" from="StateChart/Root/MovementMode/Jumping" to="." method="_on_jumping_activated"]

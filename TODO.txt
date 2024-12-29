@@ -1,0 +1,5 @@
+- Cleanup ExpressionManagers
+- Finish editor warning TODOS in all files
+- Improve debugviewer
+- Signals for expressionmanagers
+- add "cookbooks" to expressionmanagers that lets you prefactor expressions

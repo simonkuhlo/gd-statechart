@@ -1,0 +1,60 @@
+[gd_scene load_steps=5 format=3 uid="uid://1jx1hwqtvgee"]
+
+[ext_resource type="PackedScene" uid="uid://bgykounv550kx" path="res://Tools/ExpressionManager/em_debugger.tscn" id="1_7amrx"]
+[ext_resource type="PackedScene" uid="uid://cu5bceju8wfxy" path="res://Testing/Test 1/player.tscn" id="3_kvj50"]
+[ext_resource type="PackedScene" uid="uid://c7ecds4ls4bhc" path="res://Tools/StateDebugger/state_chart_debugger.tscn" id="10_kdast"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_go18k"]
+size = Vector2(1636, 78)
+
+[node name="Test_1" type="Node2D"]
+
+[node name="TabContainer" type="TabContainer" parent="."]
+offset_left = 315.0
+offset_top = 11.0
+offset_right = 1126.0
+offset_bottom = 593.0
+current_tab = 0
+
+[node name="EmDebugger" parent="TabContainer" node_paths=PackedStringArray("expression_manager") instance=ExtResource("1_7amrx")]
+layout_mode = 2
+expression_manager = NodePath("../../Player/PlayerStats")
+metadata/_tab_index = 0
+
+[node name="EmDebugger2" parent="TabContainer" node_paths=PackedStringArray("expression_manager") instance=ExtResource("1_7amrx")]
+visible = false
+layout_mode = 2
+expression_manager = NodePath("../../Player/PlayerMovementInfo")
+metadata/_tab_index = 1
+
+[node name="StateChartDebugger" parent="TabContainer" node_paths=PackedStringArray("state_to_watch") instance=ExtResource("10_kdast")]
+visible = false
+layout_mode = 2
+state_to_watch = NodePath("../../Player/StateChart/Root")
+metadata/_tab_index = 2
+
+[node name="Player" parent="." instance=ExtResource("3_kvj50")]
+
+[node name="PlayerStats" parent="Player" index="1"]
+_JumpStrength = 700.0
+
+[node name="JumpStrength" parent="Player/PlayerStats" index="0"]
+value = 700.0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(445, 560)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(87, 88)
+shape = SubResource("RectangleShape2D_go18k")
+
+[node name="ColorRect" type="ColorRect" parent="StaticBody2D"]
+offset_left = -730.0
+offset_top = 49.0
+offset_right = -690.0
+offset_bottom = 89.0
+scale = Vector2(39.5161, 1.804)
+size_flags_horizontal = 3
+color = Color(0.439049, 0.439049, 0.439049, 1)
+
+[editable path="Player"]

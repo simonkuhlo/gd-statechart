@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=3 uid="uid://c7ecds4ls4bhc"]
+
+[ext_resource type="Script" path="res://Tools/StateDebugger/state_chart_debugger.gd" id="1_7i0xt"]
+[ext_resource type="Script" path="res://Tools/StateDebugger/dynamic_tree.gd" id="2_uggtb"]
+[ext_resource type="Script" path="res://Tools/StateDebugger/settings.gd" id="3_fkwex"]
+[ext_resource type="Script" path="res://Tools/StateDebugger/entire_tree.gd" id="3_lfg3o"]
+[ext_resource type="FontFile" uid="uid://bb8skx6vfxbvg" path="res://Tools/Fonts/NotoColorEmoji-Regular.ttf" id="4_j6rum"]
+
+[sub_resource type="FontVariation" id="FontVariation_plmjy"]
+fallbacks = Array[Font]([ExtResource("4_j6rum")])
+
+[node name="StateChartDebugger" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7i0xt")
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 0
+offset_right = 656.0
+offset_bottom = 606.0
+current_tab = 1
+
+[node name="EntireTree" type="Tree" parent="TabContainer" node_paths=PackedStringArray("root", "settings")]
+visible = false
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_plmjy")
+script = ExtResource("3_lfg3o")
+root = NodePath("../..")
+settings = NodePath("../Settings")
+metadata/_tab_index = 0
+
+[node name="DynamicTree" type="Tree" parent="TabContainer" node_paths=PackedStringArray("root", "settings")]
+layout_mode = 2
+script = ExtResource("2_uggtb")
+root = NodePath("../..")
+settings = NodePath("../Settings")
+metadata/_tab_index = 1
+
+[node name="Settings" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("3_fkwex")
+metadata/_tab_index = 2
+
+[node name="SettingsContainer" type="GridContainer" parent="TabContainer/Settings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 2
+
+[node name="Label" type="Label" parent="TabContainer/Settings/SettingsContainer"]
+layout_mode = 2
+text = "Update after ticks: "
+
+[node name="update_count" type="LineEdit" parent="TabContainer/Settings/SettingsContainer"]
+layout_mode = 2
+text = "0"
+placeholder_text = "0"
+
+[connection signal="text_submitted" from="TabContainer/Settings/SettingsContainer/update_count" to="TabContainer/Settings" method="_on_update_count_text_submitted"]

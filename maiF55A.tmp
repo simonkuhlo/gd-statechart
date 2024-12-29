@@ -1,0 +1,49 @@
+[gd_scene load_steps=9 format=3 uid="uid://bkt74tyoh68ou"]
+
+[ext_resource type="Script" path="res://StateChartState/parallel_state.gd" id="1_hd0xt"]
+[ext_resource type="Script" path="res://StateTransition/state_transition.gd" id="2_rpjec"]
+[ext_resource type="Script" path="res://StateChartState/atomic_state.gd" id="2_wn5wu"]
+[ext_resource type="Script" path="res://StateChartState/compound_state.gd" id="4_c5ce1"]
+[ext_resource type="Script" path="res://StateTransition/Guards/all_of_guard.gd" id="5_nxyh8"]
+[ext_resource type="Script" path="res://StateTransition/Guards/active_state_guard.gd" id="6_3epnh"]
+[ext_resource type="Script" path="res://state_chart.gd" id="7_n1j3i"]
+[ext_resource type="PackedScene" uid="uid://c7ecds4ls4bhc" path="res://state_chart_debugger.tscn" id="8_fxx08"]
+
+[node name="Main" type="Node2D"]
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("7_n1j3i")
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("1_hd0xt")
+
+[node name="CompoundState" type="Node" parent="StateChart/Root" node_paths=PackedStringArray("default_substate")]
+script = ExtResource("4_c5ce1")
+default_substate = NodePath("AtomicState2")
+
+[node name="AtomicState2" type="Node" parent="StateChart/Root/CompoundState"]
+script = ExtResource("2_wn5wu")
+
+[node name="StateTransition2" type="Node" parent="StateChart/Root/CompoundState/AtomicState2" node_paths=PackedStringArray("to")]
+script = ExtResource("2_rpjec")
+to = NodePath("../../AtomicState1")
+
+[node name="AtomicState1" type="Node" parent="StateChart/Root/CompoundState"]
+script = ExtResource("2_wn5wu")
+
+[node name="StateTransition" type="Node" parent="StateChart/Root/CompoundState/AtomicState1" node_paths=PackedStringArray("to")]
+script = ExtResource("2_rpjec")
+to = NodePath("../../AtomicState2")
+
+[node name="AllOfGuard" type="Node" parent="StateChart/Root/CompoundState/AtomicState1/StateTransition"]
+script = ExtResource("5_nxyh8")
+
+[node name="ActiveStateGuard" type="Node" parent="StateChart/Root/CompoundState/AtomicState1/StateTransition/AllOfGuard" node_paths=PackedStringArray("state_to_watch")]
+script = ExtResource("6_3epnh")
+state_to_watch = NodePath("../../../../AtomicState2")
+
+[node name="ParallelState" type="Node" parent="StateChart/Root"]
+script = ExtResource("1_hd0xt")
+
+[node name="StateChartDebugger" parent="." node_paths=PackedStringArray("state_to_watch") instance=ExtResource("8_fxx08")]
+state_to_watch = NodePath("../StateChart/Root")

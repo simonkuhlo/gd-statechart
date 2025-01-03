@@ -1,3 +1,4 @@
+@icon("res://StateChartLib/Icons/AnyExpression.svg")
 extends Node
 class_name ExpressionNode
 
@@ -8,4 +9,4 @@ func get_value():
 	push_error("Tried to call interface function. Forgot to overwrite?")
 
 func set_value(new_value):
-	push_error("Tried to call interface function. Forgot to overwrite?")
+	expression_value_changed.emit(new_value)

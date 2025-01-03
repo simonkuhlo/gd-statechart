@@ -1,8 +1,8 @@
-@icon("res://StateChartLib/Icons/NumericExpression.svg")
+@icon("res://StateChartLib/Icons/NodePathExpression.svg")
 extends ExpressionNode
-class_name NumericalExpressionNode
+class_name NodePathExpressionNode
 
-@export var value:float:
+@export var value:NodePath:
 	set(new_value):
 		set_value(new_value)
 	get():

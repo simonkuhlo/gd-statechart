@@ -41,9 +41,6 @@ _JumpStrength = 700.0
 [node name="JumpStrength" parent="Player/PlayerStats" index="0"]
 value = 700.0
 
-[node name="PlayerMovementInfo" parent="Player" index="2"]
-predefined_expressions = null
-
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 position = Vector2(445, 560)
 

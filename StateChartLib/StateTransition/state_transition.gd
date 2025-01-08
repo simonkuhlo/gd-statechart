@@ -9,6 +9,7 @@ signal transition_possible(transition:StateTransition)
 @export var to:StateChartState:
 	set(new_state):
 		to = new_state
+		name = "To" + new_state.name
 		update_configuration_warnings()
 
 ## The Event that should trigger this Transition

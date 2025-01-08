@@ -6,6 +6,7 @@ class_name ActiveStateGuard
 @export var state_to_watch:StateChartState:
 	set(state):
 		state_to_watch = state
+		name = "If" + state.get_parent().name + state.name
 		update_configuration_warnings()
 
 func is_statisfied() -> bool:
